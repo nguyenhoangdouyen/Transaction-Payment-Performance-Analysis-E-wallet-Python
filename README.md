@@ -236,3 +236,36 @@ for col in transaction_columns_int64:
 transaction['timeStamp'] = pd.to_datetime(transaction['timeStamp'], errors='coerce')
 ```
 
+### 3️⃣ Python Analysis
+
+🧰 **Merge payment and product DataFrames**
+
+[In 5]:
+
+```python
+# Merge payment and product DataFrames
+payment_product = payment.merge(product, how='left', on='product_id')
+```
+
+#### 🧰 Find the top 3 products with the highest revenue. 
+
+[In 6]:
+
+```python
+# Calculate volume by product_id
+volume_by_product = payment_product.groupby('product_id')['volume'].agg('sum').reset_index()
+
+# Sort volume in descending order
+volume_by_product.sort_values(by='volume', ascending=False)
+
+# Filter the top 3 product_ids with the highest volume
+top_3_productid = volume_by_product.head(3)
+
+# Print the results
+print("Top 3 product_ids with the highest volume:")
+print(top_3_productid)
+```
+
+[Out 6]:
+
+![Image](https://github.com/user-attachments/assets/bc5a3949-cd1d-4abb-8bfd-5a71278da524)
