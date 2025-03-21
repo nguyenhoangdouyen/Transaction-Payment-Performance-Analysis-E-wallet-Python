@@ -247,7 +247,9 @@ transaction['timeStamp'] = pd.to_datetime(transaction['timeStamp'], errors='coer
 payment_product = payment.merge(product, how='left', on='product_id')
 ```
 
-#### 🧰 Find the top 3 products with the highest revenue. 
+#### ✅ Find the top 3 products with the highest revenue. 
+
+Find the top 3 products with the highest revenue to identify which products are generating the most income. This helps in focusing on the highest-performing products for sales and marketing strategies.
 
 [In 6]:
 
