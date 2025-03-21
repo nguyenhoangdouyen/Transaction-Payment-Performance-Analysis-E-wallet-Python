@@ -113,3 +113,93 @@ import matlotblib as plt
 import seaborn as sns
 import pandas as pd
 ```
+
+#### Step 2. Load dataset 
+
+```python
+#Load data to Colab
+from google.colab import drive
+drive.mount('/content/drive')
+
+# Import file csv to Colab
+import pandas as pd
+payment = pd.read_csv('/content/drive/MyDrive/Python_Project2/payment_report.csv', encoding='utf-8')
+product = pd.read_csv('/content/drive/MyDrive/Python_Project2/product.csv', encoding='utf-8')
+transaction = pd.read_csv('/content/drive/MyDrive/Python_Project2/transactions.csv', encoding='utf-8')
+```
+
+#### Step 3. Display the first 5 rows of the product table
+
+[In 1]:
+
+```python
+payment.head()
+product.head()
+transaction.head()
+```
+
+[Out 1]:
+
+![Image](https://github.com/user-attachments/assets/0bec70d6-555d-44ce-ac1e-50014ac0d3c5)
+
+![Image](https://github.com/user-attachments/assets/e22287f2-a0db-47e4-999b-3db02a27700b)
+
+![Image](https://github.com/user-attachments/assets/1a09c80e-4e99-4cd7-8cb2-bba3085aad51)
+
+
+#### Step 4. Checked Dataset Structure
+
+ The **payment** table consists of **919 rows** and **5 columns**:
+  - **report_month**: Object
+  - **payment_group**: Object
+  - **product_id**: Int64
+  - **source_id**: Int64
+  - **volume**: Int64
+- The **product** table has **492 rows** and **3 columns**:
+  - **product_id**: Int64
+  - **category**: Object
+  - **team_own**: Object
+- The **transaction** table contains **1,324,002 rows** and **9 columns**:
+  - **transaction_id**: Int64
+  - **merchant_id**: Int64
+  - **volume**: Int64
+  - **transType**: Int64
+  - **transStatus**: Int64
+  - **sender_id**: Float64
+  - **receiver_id**: Float64
+  - **extra_info**: Object
+  - **timeStamp**: Int64
+
+📝 **Checked for Missing Values**
+
+- Missing values were detected in the **transaction** table:
+  - **sender_id**: 49,059 missing values
+  - **receiver_id**: 164,795 missing values
+  - **extra_info**: 1,317,907 missing values
+
+No missing values were found in the **payment** or **product** tables.
+
+📝 **Checked for Duplicates**
+
+- **Payment table**: No duplicates were found.
+- **Product table**: No duplicates were found.
+- **Transaction table**: 28 duplicate rows were identified.
+
+### 💡 **Summary**
+
+#### Data Type Review:
+1. **payment**:
+   - Convert the `report_month` column from `object` to `datetime` if it contains date or month information.
+
+2. **product**:
+   - Convert the `category` and `team_own` columns from `object` to `category` to optimize memory usage and improve performance.
+
+3. **transaction**:
+   - Convert the `sender_id` and `receiver_id` columns from `float64` to `int64`, provided there are no missing values (NaN).
+   - Convert the `timeStamp` column from `int64` to `datetime` if it represents a Unix timestamp.
+
+#### Data Quality Observations:
+- The **payment** and **product** tables are clean with no missing values or duplicates.
+- The **transaction** table has missing values in the **sender_id**, **receiver_id**, and **extra_info** columns, which should be addressed prior to further analysis.
+- There are **28 duplicate rows** in the **transaction** table, which should be removed to maintain data integrity.
+
