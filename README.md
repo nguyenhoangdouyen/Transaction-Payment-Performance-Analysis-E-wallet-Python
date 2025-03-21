@@ -173,7 +173,7 @@ No missing values were found in the **payment** or **product** tables.
 - **Product table**: No duplicates were found.
 - **Transaction table**: 28 duplicate rows were identified.
 
-### 💡 **Summary**
+## 💡 **Summary**
 
 #### Data Type Review:
 1. **payment**:
@@ -190,4 +190,49 @@ No missing values were found in the **payment** or **product** tables.
 - The **payment** and **product** tables are clean with no missing values or duplicates.
 - The **transaction** table has missing values in the **sender_id**, **receiver_id**, and **extra_info** columns, which should be addressed prior to further analysis.
 - There are **28 duplicate rows** in the **transaction** table, which should be removed to maintain data integrity.
+- The outliers in the volume column of both the **transaction** and **payment tables** are considered valid and meaningful. Therefore, **no outlier removal will be performed** in this case, as these values align with the data’s expected behavior and are essential for analysis.
+
+### 2️⃣ Exploratory Data Analysis (EDA)
+
+📝 **Handle Missing Values**
+
+[In 2]:
+
+```python
+# The sender_id and receiver_id columns in the Transaction table are not important, so missing values are replaced with 'Unknow' for consistency
+transaction['sender_id'] = transaction['sender_id'].fillna(value='Unknow')
+transaction['receiver_id'] = transaction['receiver_id'].fillna(value='Unknow')
+
+# Drop the 'extra_info' column from the Transaction table
+transaction.drop('extra_info', axis=1, inplace=True)
+```
+
+📝 **Handle Duplicate**
+
+[In 3]:
+
+```python
+#Drop duplicate
+transaction.drop_duplicates(subset=None, keep='first')
+```
+
+📝 **Convert Data type**
+
+[In 4]:
+```python
+# 1. Convert the report_month column from object to datetime
+payment['report_month'] = pd.to_datetime(payment['report_month'], errors='coerce')
+
+# 2. product: Convert 'category' and 'team_own' columns from object to category
+product_columns = ['category', 'team_own']
+for col in product_columns:
+    product[col] = product[col].astype('category')
+
+# 3. transaction: Convert 'sender_id' and 'receiver_id' columns from float64 to int64, and 'timeStamp' from int64 to datetime
+transaction_columns_int64 = ['sender_id', 'receiver_id']
+for col in transaction_columns_int64:
+    transaction[col] = transaction[col].fillna('Unknow').astype(str)
+
+transaction['timeStamp'] = pd.to_datetime(transaction['timeStamp'], errors='coerce')
+```
 
