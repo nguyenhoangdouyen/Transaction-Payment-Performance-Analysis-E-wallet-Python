@@ -149,26 +149,14 @@ transaction.head()
 
 #### Step 4. Checked Dataset Structure
 
- The **payment** table consists of **919 rows** and **5 columns**:
-  - **report_month**: Object
-  - **payment_group**: Object
-  - **product_id**: Int64
-  - **source_id**: Int64
-  - **volume**: Int64
-- The **product** table has **492 rows** and **3 columns**:
-  - **product_id**: Int64
-  - **category**: Object
-  - **team_own**: Object
-- The **transaction** table contains **1,324,002 rows** and **9 columns**:
-  - **transaction_id**: Int64
-  - **merchant_id**: Int64
-  - **volume**: Int64
-  - **transType**: Int64
-  - **transStatus**: Int64
-  - **sender_id**: Float64
-  - **receiver_id**: Float64
-  - **extra_info**: Object
-  - **timeStamp**: Int64
+1. **payment**: 919 rows, 5 columns  
+   - `report_month`: Object, `payment_group`: Object, `product_id`: Int64, `source_id`: Int64, `volume`: Int64  
+
+2. **product**: 492 rows, 3 columns  
+   - `product_id`: Int64, `category`: Object, `team_own`: Object  
+
+3. **transaction**: 1,324,002 rows, 9 columns  
+   - `transaction_id`: Int64, `merchant_id`: Int64, `volume`: Int64, `transType`: Int64, `transStatus`: Int64, `sender_id`: Float64, `receiver_id`: Float64, `extra_info`: Object, `timeStamp`: Int64
 
 📝 **Checked for Missing Values**
 
