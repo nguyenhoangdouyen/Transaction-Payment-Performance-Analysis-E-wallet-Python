@@ -100,3 +100,16 @@ This project utilizes **three** datasets:
 | timeStamp      | TIMESTAMP | Time when the transaction occurred |
 
 ---
+
+## ⚒️ Main Process
+
+### 1️⃣ Data Cleaning & Preprocessing 
+
+#### Step 1. Import library
+
+```python
+import numpy as np
+import matlotblib as plt
+import seaborn as sns
+import pandas as pd
+```
