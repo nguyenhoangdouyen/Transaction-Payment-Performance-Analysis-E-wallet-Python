@@ -247,7 +247,7 @@ transaction['timeStamp'] = pd.to_datetime(transaction['timeStamp'], errors='coer
 payment_product = payment.merge(product, how='left', on='product_id')
 ```
 
-#### ✅ Find the top 3 products with the highest revenue. 
+#### ✅ Find the top 3 products with the highest revenue
 
 Find the top 3 products with the highest revenue to identify which products are generating the most income. This helps in focusing on the highest-performing products for sales and marketing strategies.
 
@@ -271,3 +271,110 @@ print(top_3_productid)
 [Out 6]:
 
 ![Image](https://github.com/user-attachments/assets/bc5a3949-cd1d-4abb-8bfd-5a71278da524)
+
+
+#### ✅ Verify whether each product is managed by only one team
+
+Check whether each product is managed by a single team to ensure clear ownership and avoid potential conflicts in responsibility.
+
+[In 7]:
+
+```python
+# Group by product_id and count the number of unique team_own values
+products_by_teamown = payment_product.groupby('product_id')['team_own'].nunique()
+
+# Identify product_id entries managed by more than one team
+abnormal_products = products_by_teamown[products_by_teamown > 1]
+
+# Print the results
+if abnormal_products.empty:
+  print('No abnormal products')
+else:
+  print('There are abnormal products:')
+  print(abnormal_products)
+```
+
+[Out 7]:
+
+![Image](https://github.com/user-attachments/assets/07ebae37-3d17-44b2-a5b2-b19b85a579c2)
+
+#### ✅ Find the team has had the lowest performance (lowest volume) since Q2.2023. Find the category that contributes the least to that team.
+
+Identify the team with the lowest performance in terms of total transaction volume since Q2 2023. Once the lowest-performing team is found, determine the product category that contributes the least to that team's total volume. This analysis helps pinpoint underperforming teams and categories, providing insights for potential improvements or strategic decisions.
+
+[In 8]:
+
+```python
+# 1. Find the team with the lowest performance (lowest volume) since Q2.2023
+
+# Filter data from Q2.2023 onwards
+payment_product_Q2 = payment_product[payment_product['report_month'] >= '2023-04-01']
+
+# Calculate the total volume for each team in Q2.2023
+volume_by_team = payment_product_Q2.groupby('team_own', observed=False)['volume'].agg('sum').reset_index()
+
+# Sort teams by volume in ascending order
+volume_by_team.sort_values(by='volume', ascending=True)
+
+# Get the team with the lowest volume
+lowest_team_name = volume_by_team.loc[volume_by_team['volume'] == volume_by_team['volume'].min(), 'team_own'].iloc[0]
+lowest_volume = volume_by_team.loc[volume_by_team['volume'] == volume_by_team['volume'].min(), 'volume'].iloc[0]
+
+# Print the result
+print(f"The lowest performance team in Q2.2023 is {lowest_team_name} with volume = {lowest_volume}")
+
+# 2. Find the category that contributes the least to the lowest-performing team
+
+# Filter data for the lowest-performing team (APS) in Q2
+volume_lowest_team_Q2 = payment_product_Q2[payment_product_Q2['team_own'] == 'APS']
+
+# Calculate total volume by category for the lowest-performing team
+vol_by_cat_APS = volume_lowest_team_Q2.groupby('category', observed=False)['volume'].agg('sum').reset_index()
+
+# Sort categories by volume in ascending order
+vol_by_cat_APS.sort_values(by='category', ascending=True)
+
+# Get the category with the lowest volume contribution
+lowest_cat = vol_by_cat_APS.loc[vol_by_cat_APS['volume'] == vol_by_cat_APS['volume'].min(), 'category'].iloc[0]
+lowest_vol = vol_by_cat_APS.loc[vol_by_cat_APS['volume'] == vol_by_cat_APS['volume'].min(), 'volume'].iloc[0]
+
+# Print the result
+print(f"The lowest contributing category to the team APS is {lowest_cat} with volume = {lowest_vol}")
+```
+
+[Out 8]:
+
+![Image](https://github.com/user-attachments/assets/13941955-b53e-44d7-991c-0f1571345689)
+
+#### ✅ Determine the contribution of source_ids in refund transactions (where payment_group = 'refund') and identify the source_id with the highest contribution.
+
+The goal is to analyze the distribution of refund transactions across different source_ids and identify which source_id has the highest contribution. This helps in understanding refund patterns and potential areas for improvement.
+
+[In 9]:
+
+```python
+# Filter transactions that are refunds
+refund = payment_product[payment_product['payment_group'] == 'refund']
+
+# Calculate total volume by each source_id
+volume_by_id = refund.groupby('source_id')['volume'].agg('sum').reset_index()
+
+# Calculate the percentage contribution of each source_id
+volume_by_id['%_contribute'] = volume_by_id['volume'] / volume_by_id['volume'].sum() * 100
+
+# Print the result
+print(volume_by_id)
+
+# Sort contributions in descending order
+volume_by_id.sort_values(by='%_contribute', ascending=False)
+
+# Get the source_id with the highest contribution
+source_id = volume_by_id.loc[volume_by_id['volume'] == volume_by_id['volume'].max(), 'source_id'].iloc[0]
+contribute = volume_by_id.loc[volume_by_id['volume'] == volume_by_id['volume'].max(), '%_contribute'].iloc[0]
+
+print(f"{source_id} is the highest contributor to refund transactions with {contribute}%")
+```
+
+[Out 9]:
+
+![Image](https://github.com/user-attachments/assets/659ccf8a-4b2f-4910-89c5-a2e0ff2d9ede)
