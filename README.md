@@ -11,11 +11,10 @@
 
 ## 📑 Table of Contents
 
-📌 Background & Overview
+1. [📖 Background & Overview](#background--overview)
+2. [📂 Dataset Description & Data Structure](#dataset-description--data-structure)
+3. [🔎 Final Conclusion & Recommendations](#final-conclusion--recommendations)
 
-📂 Dataset Description & Data Structure
-
-🔎 Final Conclusion & Recommendations
 
 ## 📖 Background & Overview
 
