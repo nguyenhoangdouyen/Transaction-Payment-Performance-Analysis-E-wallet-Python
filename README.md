@@ -1,6 +1,7 @@
-![image](https://github.com/user-attachments/assets/7e41bc46-a43f-4d89-8295-9f64cff46939)# 📊 Project Title: Transaction Payment Performance Analysis For E-Wallet | Python
+# 📱 Project Title: Transaction Payment Performance Analysis For E-Wallet | Python
 
-![image](https://github.com/user-attachments/assets/ea4a460c-8fb4-4e93-b141-5dc298e57a22)
+![image](https://github.com/user-attachments/assets/1956cdb1-a4b5-48a9-99db-7e9a5853d665)
+
 
 **Author:** Nguyen Hoang Do Uyen
 
