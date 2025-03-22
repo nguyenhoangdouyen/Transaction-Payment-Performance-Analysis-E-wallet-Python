@@ -1,4 +1,6 @@
-# 📊 Project Title: Transaction Payment Performance Analysis For E-Wallet | Python
+![image](https://github.com/user-attachments/assets/7e41bc46-a43f-4d89-8295-9f64cff46939)# 📊 Project Title: Transaction Payment Performance Analysis For E-Wallet | Python
+
+![image](https://github.com/user-attachments/assets/ea4a460c-8fb4-4e93-b141-5dc298e57a22)
 
 **Author:** Nguyen Hoang Do Uyen
 
@@ -445,7 +447,7 @@ print(final)
 
 ## 🔎 Final Conclusion & Recommendations
 
-### Findings:
+### 🔗 Findings:
 
 1. **Top 3 Products with Highest Volume**:
    - **Product ID 15**: 4,206,315,258
@@ -472,7 +474,7 @@ print(final)
 
 ---
 
-### Recommendations:
+### 📈 Recommendations:
 
 1. **Product Focus**: 
    - Prioritize **Product ID 15** as it drives the most volume.
