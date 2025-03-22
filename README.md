@@ -378,3 +378,115 @@ print(f"{source_id} is the highest contributor to refund transactions with {cont
 [Out 9]:
 
 ![Image](https://github.com/user-attachments/assets/659ccf8a-4b2f-4910-89c5-a2e0ff2d9ede)
+
+#### ✅ Define the transaction type for each row based on the given conditions:
+
+- **For transType = 2 and merchant_id = 1205:** Bank Transfer Transaction
+- **For transType = 2 and merchant_id = 2260:** Withdraw Money Transaction
+- **For transType = 2 and merchant_id = 2270:** Top Up Money Transaction
+- **For transType = 2 and other merchant_id:** Payment Transaction
+- **For transType = 8 and merchant_id = 2250:** Transfer Money Transaction
+- **For transType = 8 and other merchant_id:** Split Bill Transaction
+- **All remaining cases** are considered **invalid transactions**.
+
+The purpose of this task is to categorize each transaction into a specific transaction type based on the given conditions. By doing so, we can clearly identify the type of each transaction in the dataset, which helps in analyzing and understanding transaction patterns, processing specific transactions, and detecting any anomalies or invalid transactions. 
+
+[In 10]:
+
+```python
+# Define conditions for transaction types
+condition = [
+    (transaction['transType'] == 2) & (transaction['merchant_id'] == 1205),  # Bank Transfer Transaction
+    (transaction['transType'] == 2) & (transaction['merchant_id'] == 2260),  # Withdraw Money Transaction
+    (transaction['transType'] == 2) & (transaction['merchant_id'] == 2270),  # Top Up Money Transaction
+    (transaction['transType'] == 2) & (~transaction['merchant_id'].isin([2270, 2260, 1205])),  # Payment Transaction
+    (transaction['transType'] == 8) & (transaction['merchant_id'] == 2250),  # Transfer Money Transaction
+    (transaction['transType'] == 8) & (transaction['merchant_id'] != 2250),  # Split Bill Transaction
+]
+
+# Define the corresponding transaction types
+type_of_transactions = [
+    'Bank Transfer Transaction',
+    'Withdraw Money Transaction',
+    'Top Up Money Transaction',
+    'Payment Transaction',
+    'Transfer Money Transaction',
+    'Split Bill Transaction'
+]
+
+# Assign transaction types based on conditions
+transaction['transaction_type'] = np.select(condition, type_of_transactions, default='Invalid Transaction')
+```
+
+#### ✅ Of each transaction type (excluding invalid transactions): find the number of transactions, volume, senders and receivers
+
+This helps in understanding the distribution of transactions across different types, as well as the engagement of unique senders and receivers for each type of transaction.
+
+[In 11]:
+```python
+# Remove invalid transactions
+valid_transaction = transaction[transaction['transaction_type'] != 'Invalid Transaction']
+
+# Group by transaction type and aggregate the required metrics
+final = valid_transaction.groupby('transaction_type').agg(
+    num_trans = ('transaction_id', 'count'),  # Count of transactions
+    num_volume = ('volume', 'sum'),  # Sum of volumes
+    num_sender = ('sender_id', 'nunique'),  # Count of unique senders
+    num_receiver = ('receiver_id', 'nunique')  # Count of unique receivers
+).reset_index()
+
+# Print the final result
+print(final)
+```
+
+[Out 11]:
+
+![Image](https://github.com/user-attachments/assets/1d5a65cb-a9e5-4cee-b06c-9f988e2ea357)
+
+## 🔎 Final Conclusion & Recommendations
+
+### Findings:
+
+1. **Top 3 Products with Highest Volume**:
+   - **Product ID 15**: 4,206,315,258
+   - **Product ID 12**: 1,934,440,830
+   - **Product ID 3**: 6,000
+
+2. **Team Ownership of Products**:
+   - No abnormal products (each product is handled by one team).
+
+3. **Lowest Performance Team in Q2.2023**:
+   - **Team APS** with volume = 51,141,753
+   - **Category PXXXXXB** contributes 0 volume.
+
+4. **Highest Contributor in Refund Transactions**:
+   - **Source ID 38** contributes 59.11% of refund volume.
+
+5. **Transaction Types**:
+   - **Bank Transfer**: 37,879 transactions, volume = 50.6B
+   - **Payment**: 398,677 transactions, volume = 71.85B
+   - **Split Bill**: 1,376 transactions, volume = 4.9M
+   - **Top Up**: 290,502 transactions, volume = 108.6B
+   - **Transfer**: 341,177 transactions, volume = 37B
+   - **Withdraw**: 33,725 transactions, volume = 23.42B
+
+---
+
+### Recommendations:
+
+1. **Product Focus**: 
+   - Prioritize **Product ID 15** as it drives the most volume.
+   - Investigate ways to boost **Product ID 3**, which has low volume.
+
+2. **Team APS**:
+   - APS has the lowest performance in Q2.2023. Investigate and optimize their operations, especially in the **PXXXXXB category**, which shows no contribution.
+
+3. **Refunds**:
+   - **Source ID 38** is the biggest contributor to refunds. Investigate potential issues related to this source to reduce refund volume.
+
+4. **Transaction Optimization**:
+   - Focus on improving the **Payment** and **Top Up** transactions as they have the highest volume.
+   - Consider increasing engagement for **Split Bill Transactions** to boost volume.
+
+5. **Sender & Receiver Engagement**:
+   - Pay attention to enhancing the experience for senders and receivers, especially for high-volume transactions like **Payment** and **Top Up**.
